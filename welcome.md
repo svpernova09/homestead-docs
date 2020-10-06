@@ -6,7 +6,7 @@ Laravel Homestead is an official, pre-packaged Vagrant box that provides you a w
 
 Homestead runs on any Windows, Mac, or Linux system, and includes Nginx, PHP, MySQL, PostgreSQL, Redis, Memcached, Node, and all of the other goodies you need to develop amazing Laravel applications.
 
-Homestead works on the current Ubuntu LTS 20.04 and the previous Ubuntu LTS 18.04.
+Homestead runs on the current Ubuntu LTS 20.04 and the previous Ubuntu LTS 18.04.
 
  Homestead 11.x | Homestead 10.x
 ------------ | -------------
