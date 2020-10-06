@@ -2,7 +2,7 @@
 
 [[toc]]
 
-[https://virtualbox.org](https://virtualbox.org)
+[VirtualBox 6.1](https://www.virtualbox.org/wiki/Downloads) is one of the most widely popular Vagrant providers due to in being free of charge to use. Virtualbox is the most stable platform for *many* users.
 
 #### `natdnshostresolver`
 

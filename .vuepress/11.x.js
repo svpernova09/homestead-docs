@@ -9,7 +9,7 @@ module.exports = [
         ],
     },
     {
-        title: "Daily Usage",
+        title: "Usage",
         collapsable: false,
         children: [
             'daily-usage',
@@ -20,14 +20,14 @@ module.exports = [
     },
     {
         title: "Providers",
-        collapsable: false,
-        children: prefix('providers', [
-            'hyperv',
-            'parallels',
-            'virtualbox',
-            'vmware',
-        ]),
-    }
+        collapsable: true,
+        children: [
+            '/providers/virtualbox',
+            '/providers/vmware',
+            '/providers/parallels',
+            '/providers/hyperv',
+        ],
+    },
 ]
 
 function prefix(prefix, children) {

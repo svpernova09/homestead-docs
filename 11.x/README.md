@@ -1,1 +1,1 @@
-<meta http-equiv="refresh" content="0;url=/11.x/introduction.html" />
+<meta http-equiv="refresh" content="0;url=/11.x/installation.html" />
