@@ -1,3 +1,7 @@
+---
+sidebar: auto
+---
+
 # Providers
 
 Laravel Homestead supports the following providers
