@@ -21,15 +21,11 @@ module.exports = [
     {
         title: "Providers",
         collapsable: false,
-        children: prefix('providers', [
-            'hyperv',
-            'parallels',
-            'virtualbox',
-            'vmware',
-        ]),
+        children: [
+            'providers/hyperv',
+            'providers/parallels',
+            'providers/virtualbox',
+            'providers/vmware',
+        ],
     }
 ]
-
-function prefix(prefix, children) {
-    return children.map(child => `${prefix}/${child}`)
-}

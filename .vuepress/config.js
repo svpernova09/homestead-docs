@@ -21,21 +21,27 @@ module.exports = {
         activeHeaderLinks: false,
         searchPlaceholder: 'Press / to search',
         lastUpdated: false, // string | boolean
-        sidebarDepth: 0,
+        sidebarDepth: 2,
 
         repo: 'laravel/homestead',
 
-        docsRepo: 'laravel/homestead-docs',
+        docsRepo: 'svpernova09/homestead-docs',
         editLinks: true,
         editLinkText: 'Help us improve this page!',
 
         nav: [
             { text: 'Home', link: '/', target: '_self' },
+            {
+                text: "Version",
+                link: "/",
+                items: [{ text: "11.x", link: "/11.x/" }, { text: "10.x", link: "/10.x/" }]
+            }
         ],
 
         sidebar: {
             '/10.x/': require('./10.x'),
-            '/11.x/': require('./11.x')
+            '/11.x/': require('./11.x'),
+            '/providers/': require('./providers'),
         },
     },
 }
