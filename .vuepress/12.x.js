@@ -20,11 +20,11 @@ module.exports = [
     },
     {
         title: "Providers",
-        collapsable: true,
+        collapsable: false,
         children: [
-            '/providers/virtualbox',
-            '/providers/vmware',
-            '/providers/parallels',
+            'virtualbox',
+            'vmware',
+            'parallels',
         ],
     },
 ]

@@ -18,7 +18,7 @@ module.exports = {
     themeConfig: {
         logo: '/assets/img/logo.svg',
         displayAllHeaders: true,
-        activeHeaderLinks: false,
+        activeHeaderLinks: true,
         searchPlaceholder: 'Press / to search',
         lastUpdated: false, // string | boolean
         sidebarDepth: 2,
@@ -32,18 +32,9 @@ module.exports = {
         nav: [
             { text: 'Home', link: '/', target: '_self' },
             {
-                text: "Version",
+                text: "12.x",
                 link: "/",
                 items: [{ text: "12.x", link: "/12.x/" }]
-            },
-            {
-                text: "Providers",
-                link: "/providers",
-                items: [
-                    { text: "Virtualbox", link: "/providers/virtualbox" },
-                    { text: "VMware", link: "/providers/vmware" },
-                    { text: "Parallels", link: "/providers/parallels" },
-                ]
             }
         ],
 
