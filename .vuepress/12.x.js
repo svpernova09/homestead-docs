@@ -25,7 +25,6 @@ module.exports = [
             '/providers/virtualbox',
             '/providers/vmware',
             '/providers/parallels',
-            '/providers/hyperv',
         ],
     },
 ]
