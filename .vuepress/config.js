@@ -34,7 +34,7 @@ module.exports = {
             {
                 text: "Version",
                 link: "/",
-                items: [{ text: "11.x", link: "/11.x/" }, { text: "10.x", link: "/10.x/" }]
+                items: [{ text: "12.x", link: "/12.x/" }]
             },
             {
                 text: "Providers",
@@ -43,14 +43,12 @@ module.exports = {
                     { text: "Virtualbox", link: "/providers/virtualbox" },
                     { text: "VMware", link: "/providers/vmware" },
                     { text: "Parallels", link: "/providers/parallels" },
-                    { text: "Hyper-V", link: "/providers/hyperv" },
                 ]
             }
         ],
 
         sidebar: {
-            '/10.x/': require('./10.x'),
-            '/11.x/': require('./11.x'),
+            '/12.x/': require('./12.x'),
         },
     },
 }

@@ -6,7 +6,6 @@ module.exports = [
             'virtualbox',
             'vmware',
             'parallels',
-            'hyperv',
         ]),
     }
 ]
