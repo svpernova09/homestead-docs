@@ -111,20 +111,6 @@ If you change the `sites` property after provisioning the Homestead virtual mach
 :::tip Homestead scripts are built to be as idempotent as possible. However, if you are experiencing issues while provisioning you should destroy and rebuild the machine by executing the `vagrant destroy && vagrant up` command.
 :::
 
-#### Enable / Disable Services
-
-Homestead starts several services by default; however, you may customize which services are enabled or disabled during provisioning. For example, you may enable PostgreSQL and disable MySQL:
-
-```yaml
-services:
-    - enabled:
-        - "postgresql@12-main"
-    - disabled:
-        - "mysql"
-```
-
-The specified services will be started or stopped based on their order in the `enabled` and `disabled` directives.
-
 #### Hostname Resolution
 
 Homestead publishes hostnames over `mDNS` for automatic host resolution. If you set `hostname: homestead` in your `Homestead.yaml` file, the host will be available at `homestead.local`. MacOS, iOS, and Linux desktop distributions include `mDNS` support by default. Windows requires installing [Bonjour Print Services for Windows](https://support.apple.com/kb/DL999?viewlocale=en_US&locale=en_US).
@@ -141,23 +127,37 @@ Make sure the IP address listed is the one set in your `Homestead.yaml` file. On
 http://homestead.test
 ```
 
+### Configuring Services
+
+Homestead starts several services by default; however, you may customize which services are enabled or disabled during provisioning. For example, you may enable PostgreSQL and disable MySQL by modifying the `services` option within your `Homestead.yaml` file:
+
+```yaml
+services:
+  - enabled:
+      - "postgresql@12-main"
+  - disabled:
+      - "mysql"
+```
+
+The specified services will be started or stopped based on their order in the `enabled` and `disabled` directives.
+
 ### Launching The Vagrant Box
 
 Once you have edited the `Homestead.yaml` to your liking, run the `vagrant up` command from your Homestead directory. Vagrant will boot the virtual machine and automatically configure your shared folders and Nginx sites.
 
-To destroy the machine, you may use the `vagrant destroy --force` command.
+To destroy the machine, you may use the `vagrant destroy` command.
 
 ### Per Project Installation
 
-Instead of installing Homestead globally and sharing the same Homestead box across all of your projects, you may instead configure a Homestead instance for each project you manage. Installing Homestead per project may be beneficial if you wish to ship a `Vagrantfile` with your project, allowing others working on the project to `vagrant up`.
+Instead of installing Homestead globally and sharing the same Homestead virtual machine across all of your projects, you may instead configure a Homestead instance for each project you manage. Installing Homestead per project may be beneficial if you wish to ship a `Vagrantfile` with your project, allowing others working on the project to `vagrant up` immediately after cloning the project's repository.
 
-To install Homestead directly into your project, require it using Composer:
+You may install Homestead into your project using the Composer package manager:
 
 ```bash
-    composer require laravel/homestead --dev
+composer require laravel/homestead --dev
 ```
 
-Once Homestead has been installed, use the `make` command to generate the `Vagrantfile` and `Homestead.yaml` file in your project root. The `make` command will automatically configure the `sites` and `folders` directives in the `Homestead.yaml` file.
+Once Homestead has been installed, invoke Homestead's `make` command to generate the `Vagrantfile` and `Homestead.yaml` file for your project. These files will be placed in the root of your project. The `make` command will automatically configure the `sites` and `folders` directives in the `Homestead.yaml` file:
 
 Mac / Linux:
 
@@ -174,7 +174,7 @@ Next, run the `vagrant up` command in your terminal and access your project at `
 
 ### Installing Optional Features
 
-Optional software is installed using the "features" setting in your Homestead configuration file. Most features can be enabled or disabled with a boolean value, while some features allow multiple configuration options:
+Optional software is installed using the `features` option within your `Homestead.yaml` file. Most features can be enabled or disabled with a boolean value, while some features allow multiple configuration options:
 
 ```yaml
 features:
@@ -208,32 +208,32 @@ features:
     - webdriver: true
 ```
 
+#### Elasticsearch
+
+You may specify a supported version of Elasticsearch, which must be an exact version number (major.minor.patch). The default installation will create a cluster named 'homestead'. You should never give Elasticsearch more than half of the operating system's memory, so make sure your Homestead virtual machine has at least twice the Elasticsearch allocation.
+
+::: tip Check out the [Elasticsearch documentation](https://www.elastic.co/guide/en/elasticsearch/reference/current) to learn how to customize your configuration.
+:::
+
 #### MariaDB
 
-Enabling MariaDB will remove MySQL and install MariaDB. MariaDB serves as a drop-in replacement for MySQL, so you should still use the `mysql` database driver in your application's database configuration.
+Enabling MariaDB will remove MySQL and install MariaDB. MariaDB typically serves as a drop-in replacement for MySQL, so you should still use the `mysql` database driver in your application's database configuration.
 
 #### MongoDB
 
 The default MongoDB installation will set the database username to `homestead` and the corresponding password to `secret`.
 
-#### Elasticsearch
-
-You may specify a supported version of Elasticsearch, which may be a major version or an exact version number (major.minor.patch). The default installation will create a cluster named 'homestead'. You should never give Elasticsearch more than half of the operating system's memory, so make sure your Homestead machine has at least twice the Elasticsearch allocation.
-
-::: tip Check out the [Elasticsearch documentation](https://www.elastic.co/guide/en/elasticsearch/reference/current) to learn how to customize your configuration.
-:::
-
 #### Neo4j
 
-The default Neo4j installation will set the database username to `homestead` and corresponding password to `secret`. To access the Neo4j browser, visit `http://homestead.test:7474` via your web browser. The ports `7687` (Bolt), `7474` (HTTP), and `7473` (HTTPS) are ready to serve requests from the Neo4j client.
+The default Neo4j installation will set the database username to `homestead` and the corresponding password to `secret`. To access the Neo4j browser, visit `http://homestead.test:7474` via your web browser. The ports `7687` (Bolt), `7474` (HTTP), and `7473` (HTTPS) are ready to serve requests from the Neo4j client.
 
 ### Aliases
 
-You may add Bash aliases to your Homestead machine by modifying the `aliases` file within your Homestead directory:
+You may add Bash aliases to your Homestead virtual machine by modifying the `aliases` file within your Homestead directory:
 
 ```bash
 alias c='clear'
 alias ..='cd ..'
 ```
 
-After you have updated the `aliases` file, you should re-provision the Homestead machine using the `vagrant reload --provision` command. This will ensure that your new aliases are available on the machine.
+After you have updated the `aliases` file, you should re-provision the Homestead virtual machine using the `vagrant reload --provision` command. This will ensure that your new aliases are available on the machine.
