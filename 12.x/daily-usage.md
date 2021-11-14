@@ -2,13 +2,15 @@
 
 [[toc]]
 
+<a name="connecting-via-ssh"></a>
 ### Connecting Via SSH
 
 You can SSH into your virtual machine by executing the `vagrant ssh` terminal command from your Homestead directory.
 
+<a name="adding-additional-sites"></a>
 ### Adding Additional Sites
 
-Once your Homestead environment is provisioned and running, you may want to add additional Nginx sites for your Laravel applications. You can run as many Laravel installations as you wish on a single Homestead environment. To add an additional site, add the site to your `Homestead.yaml` file:
+Once your Homestead environment is provisioned and running, you may want to add additional Nginx sites for your other Laravel projects. You can run as many Laravel projects as you wish on a single Homestead environment. To add an additional site, add the site to your `Homestead.yaml` file.
 
 ```yaml
 sites:
@@ -18,18 +20,21 @@ sites:
       to: /home/vagrant/project2/public
 ```
 
-If Vagrant is not automatically managing your "hosts" file, you may need to add the new site to that file as well:
+:::tip You should ensure that you have configured a [folder mapping](#configuring-shared-folders) for the project's directory before adding the site.:::
+
+If Vagrant is not automatically managing your "hosts" file, you may need to add the new site to that file as well. On macOS and Linux, this file is located at `/etc/hosts`. On Windows, it is located at `C:\Windows\System32\drivers\etc\hosts`:
 
 ```yaml
 192.168.10.10  homestead.test
 192.168.10.10  another.test
 ```
 
-Once the site has been added, run the `vagrant reload --provision` command from your Homestead directory.
+Once the site has been added, execute the `vagrant reload --provision` terminal command from your Homestead directory.
 
+<a name="site-types"></a>
 #### Site Types
 
-Homestead supports several types of sites which allow you to easily run projects that are not based on Laravel. For example, we may easily add a Symfony application to Homestead using the `symfony2` site type:
+Homestead supports several "types" of sites which allow you to easily run projects that are not based on Laravel. For example, we may easily add a Statamic application to Homestead using the `statamic` site type:
 
 ```yaml
 sites:
@@ -40,6 +45,7 @@ sites:
 
 The available site types are: `apache`, `apigility`, `expressive`, `laravel` (the default), `proxy`, `silverstripe`, `statamic`, `symfony2`, `symfony4`, and `zf`.
 
+<a name="site-parameters"></a>
 #### Site Parameters
 
 You may add additional Nginx `fastcgi_param` values to your site via the `params` site directive. For example, we'll add a `FOO` parameter with a value of `BAR`:
@@ -52,7 +58,7 @@ sites:
           - key: FOO
             value: BAR
 ```
-
+<a name="environment-variables"></a>
 ### Environment Variables
 
 You can define global environment variables by adding them to your `Homestead.yaml` file:
@@ -65,8 +71,9 @@ variables:
       value: bar
 ```
 
-After updating the `Homestead.yaml`, be sure to re-provision the machine by running `vagrant reload --provision`. This will update the PHP-FPM configuration for all of the installed PHP versions and also update the environment for the `vagrant` user.
+After updating the `Homestead.yaml` file, be sure to re-provision the machine by executing the `vagrant reload --provision` command. This will update the PHP-FPM configuration for all of the installed PHP versions and also update the environment for the `vagrant` user.
 
+<a name="ports"></a>
 ### Ports
 
 By default, the following ports are forwarded to your Homestead environment:
@@ -83,9 +90,11 @@ By default, the following ports are forwarded to your Homestead environment:
 - **Minio:** 9600 &rarr; Forwards To 9600
 </div>
 
+<a name="forwarding-additional-ports"></a>
 #### Forwarding Additional Ports
 
-If you wish, you may forward additional ports to the Vagrant box, as well as specify their protocol:
+If you wish, you may forward additional ports to the Vagrant box by defining a `ports` configuration entry within your `Homestead.yaml` file. After updating the `Homestead.yaml` file, be sure to re-provision the machine by executing the `vagrant reload --provision` command:
+
 ```yaml
 ports:
     - send: 50000
@@ -95,9 +104,11 @@ ports:
       protocol: udp
 ```
 
+<a name="php-versions"></a>
 ### PHP Versions
 
 Homestead 6 introduced support for running multiple versions of PHP on the same virtual machine. You may specify which version of PHP to use for a given site within your `Homestead.yaml` file. The available PHP versions are: "5.6", "7.0", "7.1", "7.2", "7.3", "7.4", and "8.0" (the default):
+
 ```yaml
 sites:
     - map: homestead.test
@@ -117,7 +128,7 @@ php7.4 artisan list
 php8.0 artisan list
 ```
 
-You may also update the default CLI version by issuing the following commands from within your Homestead virtual machine:
+You may change the default version of PHP used by the CLI by issuing the following commands from within your Homestead virtual machine:
 
 ```bash
 php56
@@ -129,13 +140,14 @@ php74
 php80
 ```
 
+<a name="connecting-to-databases"></a>
 ### Connecting To Databases
 
 A `homestead` database is configured for both MySQL and PostgreSQL out of the box. To connect to your MySQL or PostgreSQL database from your host machine's database client, you should connect to `127.0.0.1` on port `33060` (MySQL) or `54320` (PostgreSQL). The username and password for both databases is `homestead` / `secret`.
 
-:::tip You should only use these non-standard ports when connecting to the databases from your host machine. You will use the default 3306 and 5432 ports in your Laravel application's `database` configuration file since Laravel is running _within_ the virtual machine.
-:::
+> {note} You should only use these non-standard ports when connecting to the databases from your host machine. You will use the default 3306 and 5432 ports in your Laravel application's `database` configuration file since Laravel is running _within_ the virtual machine.
 
+<a name="database-backups"></a>
 ### Database Backups
 
 Homestead can automatically backup your database when your Homestead virtual machine is destroyed. To utilize this feature, you must be using Vagrant 2.1.0 or greater. Or, if you are using an older version of Vagrant, you must install the `vagrant-triggers` plug-in. To enable automatic database backups, add the following line to your `Homestead.yaml` file:
@@ -146,23 +158,10 @@ backup: true
 
 Once configured, Homestead will export your databases to `mysql_backup` and `postgres_backup` directories when the `vagrant destroy` command is executed. These directories can be found in the folder where you installed Homestead or in the root of your project if you are using the [per project installation](#per-project-installation) method.
 
-### Database Snapshots
-
-Homestead supports freezing the state of MySQL and MariaDB databases and branching between them using [Logical MySQL Manager](https://github.com/Lullabot/lmm). For example, imagine working on a site with a multi-gigabyte database. You can import the database and take a snapshot. After doing some work and creating some test content locally, you may quickly restore back to the original state.
-
-Under the hood, LMM uses LVM's thin snapshot functionality with copy-on-write support. In practice, this means that changing a single row in a table will only cause the changes you made to be written to disk, saving significant time and disk space during restores.
-
-Since `lmm` interacts with LVM, it must be run as `root`. To see all available commands, run `sudo lmm` inside your Vagrant box. A common workflow looks like the following:
-
-1. Import a database into the default `master` lmm branch.
-1. Save a snapshot of the unchanged database using `sudo lmm branch prod-YYYY-MM-DD`.
-1. Modify the database.
-1. Run `sudo lmm merge prod-YYYY-MM-DD` to undo all changes.
-1. Run `sudo lmm delete <branch>` to delete unneeded branches.
-
+<a name="configuring-cron-schedules"></a>
 ### Configuring Cron Schedules
 
-Laravel provides a convenient way to [schedule Cron jobs](/docs/{{version}}/scheduling) by scheduling a single `schedule:run` Artisan command to be run every minute. The `schedule:run` command will examine the job schedule defined in your `App\Console\Kernel` class to determine which jobs should be run.
+Laravel provides a convenient way to [schedule cron jobs](/docs/{{version}}/scheduling) by scheduling a single `schedule:run` Artisan command to run every minute. The `schedule:run` command will examine the job schedule defined in your `App\Console\Kernel` class to determine which scheduled tasks to run.
 
 If you would like the `schedule:run` command to be run for a Homestead site, you may set the `schedule` option to `true` when defining the site:
 
@@ -173,11 +172,12 @@ sites:
       schedule: true
 ```
 
-The Cron job for the site will be defined in the `/etc/cron.d` folder of the virtual machine.
+The cron job for the site will be defined in the `/etc/cron.d` directory of the Homestead virtual machine.
 
-### Configuring Mailhog
+<a name="configuring-mailhog"></a>
+### Configuring MailHog
 
-Mailhog allows you to easily catch your outgoing email and examine it without actually sending the mail to its recipients. To get started, update your `.env` file to use the following mail settings:
+[MailHog](https://github.com/mailhog/MailHog) allows you to intercept your outgoing email and examine it without actually sending the mail to its recipients. To get started, update your application's `.env` file to use the following mail settings:
 
 ```ini
 MAIL_MAILER=smtp
@@ -192,15 +192,15 @@ Once Mailhog has been configured, you may access the Mailhog dashboard at `http:
 
 ### Configuring Minio
 
-Minio is an open source object storage server with an Amazon S3 compatible API. To install Minio, update your `Homestead.yaml` file with the following configuration option in the [features](#installing-optional-features) section:
+[Minio](https://github.com/minio/minio) is an open source object storage server with an Amazon S3 compatible API. To install Minio, update your `Homestead.yaml` file with the following configuration option in the [features](#installing-optional-features) section:
 
 ```yaml
 minio: true
 ```
 
-By default, Minio is available on port 9600. You may access the Minio control panel by visiting `http://localhost:9600/`. The default access key is `homestead`, while the default secret key is `secretkey`. When accessing Minio, you should always use region `us-east-1`.
+By default, Minio is available on port 9600. You may access the Minio control panel by visiting `http://localhost:9600`. The default access key is `homestead`, while the default secret key is `secretkey`. When accessing Minio, you should always use region `us-east-1`.
 
-In order to use Minio you will need to adjust the S3 disk configuration in your `config/filesystems.php` configuration file. You will need to add the `use_path_style_endpoint` option to the disk configuration, as well as change the `url` key to `endpoint`:
+In order to use Minio, you will need to adjust the S3 disk configuration in your application's `config/filesystems.php` configuration file. You will need to add the `use_path_style_endpoint` option to the disk configuration as well as change the `url` key to `endpoint`:
 
 ```yaml
     's3' => [
@@ -223,7 +223,8 @@ AWS_DEFAULT_REGION=us-east-1
 AWS_URL=http://localhost:9600
 ```
 
-To provision buckets, add a `buckets` directive to your Homestead configuration file:
+To provision Minio powered "S3" buckets, add a `buckets` directive to your `Homestead.yaml` file. After defining your buckets, you should execute the `vagrant reload --provision` command in your terminal:
+
 
 ```yaml
     buckets:
@@ -232,8 +233,10 @@ To provision buckets, add a `buckets` directive to your Homestead configuration 
         - name: your-private-bucket
           policy: none
 ```
+
 Supported `policy` values include: `none`, `download`, `upload`, and `public`.
 
+<a name="laravel-dusk"></a>
 ### Laravel Dusk
 
 In order to run [Laravel Dusk](/docs/{{version}}/dusk) tests within Homestead, you should enable the [`webdriver` feature](#installing-optional-features) in your Homestead configuration:
@@ -245,16 +248,17 @@ features:
 
 After enabling the `webdriver` feature, you should execute the `vagrant reload --provision` command in your terminal.
 
+<a name="sharing-your-environment"></a>
 ### Sharing Your Environment
 
-Sometimes you may wish to share what you're currently working on with coworkers or a client. Vagrant has a built-in way to support this via `vagrant share`; however, this will not work if you have multiple sites configured in your `Homestead.yaml` file.
+Sometimes you may wish to share what you're currently working on with coworkers or a client. Vagrant has built-in support for this via the `vagrant share` command; however, this will not work if you have multiple sites configured in your `Homestead.yaml` file.
 
-To solve this problem, Homestead includes its own `share` command. To get started, SSH into your Homestead machine via `vagrant ssh` and run `share homestead.test`. This will share the `homestead.test` site from your `Homestead.yaml` configuration file. You may substitute any of your other configured sites for `homestead.test`:
+To solve this problem, Homestead includes its own `share` command. To get started, [SSH into your Homestead virtual machine](#connecting-via-ssh) via `vagrant ssh` and execute the `share homestead.test` command. This command will share the `homestead.test` site from your `Homestead.yaml` configuration file. You may substitute any of your other configured sites for `homestead.test`:
 
 ```bash
 share homestead.test
 ```
-
+`
 After running the command, you will see an Ngrok screen appear which contains the activity log and the publicly accessible URLs for the shared site. If you would like to specify a custom region, subdomain, or other Ngrok runtime option, you may add them to your `share` command:
 
 ```bash

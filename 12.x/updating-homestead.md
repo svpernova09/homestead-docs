@@ -2,6 +2,9 @@
 
 [[toc]]
 
+<a name="updating-homestead"></a>
+## Updating Homestead
+
 Before you begin updating Homestead you should ensure you have removed your current virtual machine by running the following command in your Homestead directory:
 
 ```bash

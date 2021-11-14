@@ -15,8 +15,8 @@ PHP 7.0 | Mailhog
 PHP 5.6 | avahi
 Nginx | ngrok
 MySQL 8 | Xdebug
-Composer| XHProf / Tideways / XHGui
-PostgreSQL (9.6, 10, 11, 12, 13) | wp-cli
+Composer| XHProf
+PostgreSQL 13 | wp-cli
 Sqlite3 | 
 
 
@@ -36,3 +36,4 @@ Gearman | RabbitMQ
 Go | Solr
 Grafana | Webdriver & Laravel Dusk Utilities
 InfluxDB | MariaDB
+Meilisearch | TimescaleDB
